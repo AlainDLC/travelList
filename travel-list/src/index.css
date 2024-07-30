@@ -20,7 +20,7 @@ html {
 body {
   font-size: 2.4rem;
   font-family: sans-serif;
-  color: #5a3e2b;
+  color: #312b5a;
   font-family: "Quicksand";
   font-weight: 500;
 }
@@ -61,8 +61,8 @@ h3 {
 button,
 select,
 input {
-  background-color: #ffebb3;
-  color: #5a3e2b;
+  background-color: #b3ffe2;
+  color: #2b5a48;
   font-family: inherit;
   border: none;
   border-radius: 10rem;
