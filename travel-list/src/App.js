@@ -7,17 +7,20 @@ const initialItems = [
 ];
 
 export default function App() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(initialItems);
 
   function handleAddItems(item) {
     setItems((items) => [...items, item]);
   }
 
+  function handleDeletedItems(id) {
+    setItems((items) => items.filter((item) => item.id !== id));
+  }
   return (
     <>
       <Logo />
       <Form onAddItems={handleAddItems} />
-      <PackingList items={items} />
+      <PackingList items={items} onDeletedItems={handleDeletedItems} />
       <Stats />
     </>
   );
@@ -36,9 +39,9 @@ function Form({ onAddItems }) {
     if (!description) return;
     const newItem = { id: Date.now(), description, quantity, packed: false };
 
+    onAddItems(newItem);
     setDescription("");
     setQuantity(1);
-    onAddItems(newItem);
   }
 
   return (
@@ -66,25 +69,27 @@ function Form({ onAddItems }) {
   );
 }
 
-function PackingList({ items }) {
+function PackingList({ items, onDeletedItems }) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item item={item} key={item.id} />
+          <Item item={item} key={item.id} onDeletedItems={onDeletedItems} />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item, onDeletedItems }) {
   return (
     <li>
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description} {item.newItem}
       </span>
-      <button>❌</button>
+      <button type="button" onClick={() => onDeletedItems(item.id)}>
+        ❌
+      </button>
     </li>
   );
 }
