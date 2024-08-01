@@ -26,9 +26,9 @@ export default function App() {
       <PackingList
         items={items}
         onDeletedItems={handleDeletedItems}
-        onToggleItems={handleToogle}
+        onToggle={handleToogle}
       />
-      <Stats />
+      <Stats items={items} />
     </>
   );
 }
@@ -75,7 +75,7 @@ function Form({ onAddItem }) {
   );
 }
 
-function PackingList({ items, onDeletedItems, onToggleItems }) {
+function PackingList({ items, onDeletedItems, onToggle }) {
   return (
     <div className="list">
       <ul>
@@ -84,7 +84,7 @@ function PackingList({ items, onDeletedItems, onToggleItems }) {
             item={item}
             key={item.id}
             onDeletedItems={onDeletedItems}
-            onToggleItems={onToggleItems}
+            onToggle={onToggle}
           />
         ))}
       </ul>
@@ -92,13 +92,13 @@ function PackingList({ items, onDeletedItems, onToggleItems }) {
   );
 }
 
-function Item({ item, onDeletedItems, onToggleItems }) {
+function Item({ item, onDeletedItems, onToggle }) {
   return (
     <li>
       <input
         type="checkbox"
         value={item.packed}
-        onChange={() => onToggleItems(item.id)}
+        onChange={() => onToggle(item.id)}
       />
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description} {item.newItem}
@@ -110,10 +110,27 @@ function Item({ item, onDeletedItems, onToggleItems }) {
   );
 }
 
-function Stats() {
+function Stats({ items }) {
+  if (!items.length)
+    return (
+      <p className="stats">
+        <em>🎉🎉🎉 Start adding some items to your packing list 🎉🎉🎉</em>
+      </p>
+    );
+  const numOfList = items.length;
+  const numOfPacked = items.filter((item) => item.packed).length;
+  const percentPacked =
+    numOfList > 0 ? Number(Math.round((numOfPacked / numOfList) * 100)) : 0;
+
   return (
     <footer className="stats">
-      🧳<em> You have X items on your list, and you alrready packed X (X%)</em>
+      🧳
+      <em>
+        {percentPacked === 100
+          ? "You got everthing! Ready to go "
+          : ` You have ${numOfList} items on your list, and you already packed
+        ${numOfPacked} (${percentPacked})%`}
+      </em>
     </footer>
   );
 }
